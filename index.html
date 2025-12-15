@@ -37,23 +37,18 @@
       </div>
 
       <div class="field-group">
-        <label for="hotelId" class="field-label">Hotel ID</label>
+        <label for="topics" class="field-label">Topics (comma separated)</label>
         <input
-          id="hotelId"
+          id="topics"
           class="field-input"
-          value="1"
-          placeholder="1"
+          value=""
+          placeholder="hotel.{hotelId}.{event}, example: hotel.1.update_kds"
         >
       </div>
 
       <div class="field-group" style="grid-column: 1 / -1;">
-        <label for="events" class="field-label">Event types (comma separated)</label>
-        <input
-          id="events"
-          class="field-input"
-          value="update_kds,update_table,update_order"
-          placeholder="update_kds,update_table,update_order"
-        >
+        <div class="field-label">STOMP Topic URLs</div>
+        <div id="exampleTopics" class="example-topics"></div>
       </div>
 
       <div class="button-row" style="grid-column: 1 / -1;">
@@ -81,12 +76,37 @@
     el.scrollTop = el.scrollHeight;
   }
 
+  function updateExampleTopics() {
+    const topics = document.getElementById("topics").value
+                    .split(",")
+                    .map(t => t.trim())
+                    .filter(t => t.length > 0);
+    
+    const exampleEl = document.getElementById("exampleTopics");
+    
+    if (topics.length === 0) {
+      exampleEl.innerHTML = '<div class="example-topic-item">No topics specified</div>';
+      return;
+    }
+    
+    exampleEl.innerHTML = topics.map(topic => {
+      const stompTopic = `/topic/${topic}`;
+      return `<div class="example-topic-item">${stompTopic}</div>`;
+    }).join('');
+  }
+
+  // Update examples when inputs change
+  document.addEventListener("DOMContentLoaded", () => {
+    updateExampleTopics();
+    document.getElementById("topics").addEventListener("input", updateExampleTopics);
+  });
+
   function connect() {
     const wsUrl = document.getElementById("wsUrl").value;
-    const hotelId = document.getElementById("hotelId").value;
-    const events = document.getElementById("events").value
+    const topics = document.getElementById("topics").value
                     .split(",")
-                    .map(e => e.trim());
+                    .map(t => t.trim())
+                    .filter(t => t.length > 0);
 
     const socket = new SockJS(wsUrl);
     stompClient = Stomp.over(socket);
@@ -95,12 +115,12 @@
     stompClient.connect({}, () => {
       log(`✅ Connected: ${wsUrl}`);
 
-      events.forEach(event => {
-        const topic = `/topic/hotel.${hotelId}.${event}`;
-        stompClient.subscribe(topic, message => {
-          log(`📩 Received message on: ${topic} → ${message.body}`);
+      topics.forEach(topic => {
+        const stompTopic = `/topic/${topic}`;
+        stompClient.subscribe(stompTopic, message => {
+          log(`📩 Received message on: ${stompTopic} → ${message.body}`);
         });
-        log(`🔔 Subscribed to: ${topic}`);
+        log(`🔔 Subscribed to: ${stompTopic}`);
       });
 
     }, error => {
