@@ -1,0 +1,251 @@
+/* Global Layout */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  background: radial-gradient(circle at top left, #1f2937 0, #020617 45%, #000 100%);
+  color: #e5e7eb;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.app-shell {
+  width: 100%;
+  max-width: 960px;
+  padding: 24px;
+}
+
+.card {
+  background: rgba(15, 23, 42, 0.96);
+  border-radius: 16px;
+  padding: 24px 24px 20px;
+  box-shadow:
+    0 18px 45px rgba(15, 23, 42, 0.85),
+    0 0 0 1px rgba(148, 163, 184, 0.07);
+  backdrop-filter: blur(12px);
+}
+
+.card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 12px;
+  margin-bottom: 18px;
+}
+
+.title {
+  margin: 0;
+  font-size: 1.4rem;
+  letter-spacing: 0.03em;
+}
+
+.subtitle {
+  margin: 0;
+  font-size: 0.85rem;
+  color: #9ca3af;
+}
+
+.badge {
+  padding: 4px 10px;
+  border-radius: 999px;
+  border: 1px solid rgba(148, 163, 184, 0.4);
+  font-size: 0.75rem;
+  color: #e5e7eb;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.badge span {
+  width: 7px;
+  height: 7px;
+  border-radius: 999px;
+  background: #22c55e;
+  box-shadow: 0 0 0 4px rgba(34, 197, 94, 0.25);
+}
+
+.brand-link {
+  color: #22c55e;
+}
+
+.badge:hover {
+  border-color: #22c55e;
+  box-shadow: 0 0 0 1px rgba(34, 197, 94, 0.65);
+  background: rgba(15, 23, 42, 0.98);
+}
+
+
+
+/* Form */
+.form-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.3fr) minmax(0, 1fr);
+  gap: 16px 20px;
+  align-items: end;
+}
+
+.field-group {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.field-label {
+  font-size: 0.8rem;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: #9ca3af;
+}
+
+.field-input {
+  padding: 9px 11px;
+  border-radius: 9px;
+  border: 1px solid rgba(148, 163, 184, 0.45);
+  background: rgba(15, 23, 42, 0.9);
+  color: #e5e7eb;
+  font-size: 0.9rem;
+  outline: none;
+  transition: border-color 0.16s ease, box-shadow 0.16s ease, background 0.16s ease;
+}
+
+.field-input::placeholder {
+  color: #6b7280;
+}
+
+.field-input:focus {
+  border-color: #22c55e;
+  box-shadow: 0 0 0 1px rgba(34, 197, 94, 0.65);
+  background: rgba(15, 23, 42, 0.98);
+}
+
+/* Buttons */
+.button-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 6px;
+}
+
+.btn {
+  position: relative;
+  border: none;
+  border-radius: 999px;
+  padding: 8px 16px;
+  font-size: 0.85rem;
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: #111827;
+  color: #e5e7eb;
+  transition:
+    background 0.18s ease,
+    color 0.18s ease,
+    box-shadow 0.18s ease,
+    transform 0.1s ease;
+}
+
+.btn-primary {
+  background: linear-gradient(135deg, #22c55e, #16a34a);
+  color: #022c22;
+  box-shadow:
+    0 10px 25px rgba(22, 163, 74, 0.35),
+    0 0 0 1px rgba(21, 128, 61, 0.85);
+}
+
+.btn-secondary {
+  border: 1px solid rgba(148, 163, 184, 0.7);
+}
+
+.btn:hover {
+  transform: translateY(-0.5px);
+  box-shadow: 0 14px 35px rgba(15, 23, 42, 0.7);
+}
+
+.btn-primary:hover {
+  background: linear-gradient(135deg, #4ade80, #22c55e);
+}
+
+.btn:active {
+  transform: translateY(0);
+  box-shadow: 0 6px 18px rgba(15, 23, 42, 0.7);
+}
+
+/* Log Console */
+.log-wrapper {
+  margin-top: 18px;
+}
+
+.log-label-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  margin-bottom: 8px;
+  color: #9ca3af;
+  font-size: 0.78rem;
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+}
+
+.log-meta {
+  font-size: 0.75rem;
+  color: #6b7280;
+  text-transform: none;
+  letter-spacing: 0.03em;
+}
+
+#log {
+  margin: 0;
+  border-radius: 12px;
+  padding: 10px 12px;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+  font-size: 0.8rem;
+  line-height: 1.45;
+  background: radial-gradient(circle at top left, #020617 0, #020617 45%, #000 100%);
+  color: #bbf7d0;
+  border: 1px solid rgba(55, 65, 81, 0.9);
+  height: 260px;
+  overflow: auto;
+  box-shadow: inset 0 0 0 1px rgba(15, 23, 42, 0.85);
+}
+
+#log::-webkit-scrollbar {
+  width: 7px;
+}
+
+#log::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+#log::-webkit-scrollbar-thumb {
+  background: rgba(55, 65, 81, 0.9);
+  border-radius: 999px;
+}
+
+/* Responsive */
+@media (max-width: 720px) {
+  .card {
+    padding: 18px 16px 16px;
+  }
+
+  .form-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .button-row {
+    justify-content: flex-start;
+  }
+}
+
+
