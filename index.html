@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>STOMP WebSocket Client by Runal Banarse</title>
+
+  <!-- SockJS & STOMP -->
+  <script src="https://cdn.jsdelivr.net/npm/sockjs-client@1/dist/sockjs.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/stompjs@2.3.3/lib/stomp.min.js"></script>
+
+  <style>
+    body { font-family: Arial; }
+    pre { background: #111; color: #0f0; padding: 10px; height: 300px; overflow: auto; }
+  </style>
+</head>
+<body>
+
+<h2>STOMP WebSocket Client</h2>
+<h3>Developer: Runal Banarse (runalb.com)</h3>
+<br>
+
+<label>WebSocket URL:</label><br>
+<input id="wsUrl" value="http://localhost:8080/ws" size="40"><br><br>
+
+<label>Hotel Id:</label><br>
+<input id="hotelId" value="1" size="40"><br><br>
+
+<label>Event Types (comma separated):</label><br>
+<input id="events" value="update_kds,update_table,update_order" size="40"><br><br>
+
+<button onclick="connect()">Connect</button>
+<button onclick="disconnect()">Disconnect</button>
+
+<pre id="log"></pre>
+
+<script>
+  let stompClient = null;
+
+  function log(msg) {
+    const el = document.getElementById("log");
+    el.textContent += msg + "\n";
+    el.scrollTop = el.scrollHeight;
+  }
+
+  function connect() {
+    const wsUrl = document.getElementById("wsUrl").value;
+    const hotelId = document.getElementById("hotelId").value;
+    const events = document.getElementById("events").value
+                    .split(",")
+                    .map(e => e.trim());
+
+    const socket = new SockJS(wsUrl);
+    stompClient = Stomp.over(socket);
+    stompClient.debug = null; // disable verbose logs
+
+    stompClient.connect({}, () => {
+      log("✅ Connected");
+
+      events.forEach(event => {
+        const topic = `/topic/hotel.${hotelId}.${event}`;
+        stompClient.subscribe(topic, message => {
+          log(`📩 ${topic} → ${message.body}`);
+        });
+        log(`🔔 Subscribed to ${topic}`);
+      });
+
+    }, error => {
+      log("❌ Connection error: " + error);
+    });
+  }
+
+  function disconnect() {
+    if (stompClient) {
+      stompClient.disconnect(() => log("🔌 Disconnected"));
+    }
+  }
+</script>
+
+</body>
+</html>
