@@ -190,6 +190,13 @@ body {
     transform 0.1s ease;
 }
 
+.btn[disabled] {
+  cursor: default;
+  opacity: 0.7;
+  box-shadow: none;
+  transform: none;
+}
+
 .btn-primary {
   background: linear-gradient(135deg, #4ade80, #22c55e);
   color: #022c22;
@@ -198,6 +205,29 @@ body {
 
 .btn-secondary {
   border: 1px solid rgba(148, 163, 184, 0.7);
+}
+
+.btn-spinner {
+  width: 14px;
+  height: 14px;
+  border-radius: 999px;
+  border: 2px solid rgba(15, 23, 42, 0.2);
+  border-top-color: rgba(15, 23, 42, 0.9);
+  display: none;
+}
+
+.btn-loading .btn-spinner {
+  display: inline-block;
+  animation: spin 0.6s linear infinite;
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
 }
 
 .btn:hover {

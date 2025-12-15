@@ -52,7 +52,10 @@
       </div>
 
       <div class="button-row" style="grid-column: 1 / -1;">
-        <button class="btn btn-primary" onclick="connect()">Connect</button>
+        <button id="connectBtn" class="btn btn-primary" onclick="connect()">
+          <span class="btn-label">Connect</span>
+          <span class="btn-spinner" aria-hidden="true"></span>
+        </button>
         <button class="btn btn-secondary" onclick="disconnect()">Disconnect</button>
       </div>
     </div>
@@ -69,6 +72,7 @@
 
 <script>
   let stompClient = null;
+  let isConnecting = false;
 
   function log(msg) {
     const el = document.getElementById("log");
@@ -102,17 +106,33 @@
   });
 
   function connect() {
+    // Prevent multiple connects while in progress or already connected
+    if (isConnecting || (stompClient && stompClient.connected)) return;
+
     const wsUrl = document.getElementById("wsUrl").value;
     const topics = document.getElementById("topics").value
                     .split(",")
                     .map(t => t.trim())
                     .filter(t => t.length > 0);
 
+    const connectBtn = document.getElementById("connectBtn");
+    const connectLabel = connectBtn.querySelector(".btn-label");
+
+    isConnecting = true;
+    connectBtn.classList.add("btn-loading");
+    connectBtn.disabled = true;
+    connectLabel.textContent = "Connecting...";
+
     const socket = new SockJS(wsUrl);
     stompClient = Stomp.over(socket);
     stompClient.debug = null; // disable verbose logs
 
     stompClient.connect({}, () => {
+      isConnecting = false;
+      connectBtn.classList.remove("btn-loading");
+      connectBtn.disabled = true;
+      connectLabel.textContent = "Connected";
+
       log(`✅ Connected: ${wsUrl}`);
 
       topics.forEach(topic => {
@@ -124,13 +144,32 @@
       });
 
     }, error => {
+      isConnecting = false;
+      connectBtn.classList.remove("btn-loading");
+      connectBtn.disabled = false;
+      connectLabel.textContent = "Connect";
+
       log("❌ Connection error: " + error);
     });
   }
 
   function disconnect() {
+    const connectBtn = document.getElementById("connectBtn");
+    const connectLabel = connectBtn.querySelector(".btn-label");
+
+    isConnecting = false;
+    connectBtn.classList.remove("btn-loading");
+
     if (stompClient) {
-      stompClient.disconnect(() => log("🔌 Disconnected"));
+      stompClient.disconnect(() => {
+        log("🔌 Disconnected");
+        connectBtn.disabled = false;
+        connectLabel.textContent = "Connect";
+        stompClient = null;
+      });
+    } else {
+      connectBtn.disabled = false;
+      connectLabel.textContent = "Connect";
     }
   }
 </script>
