@@ -150,6 +150,10 @@ body {
   color: #9ca3af;
   border-radius: 4px;
   transition: color 0.16s ease, background 0.16s ease;
+  z-index: 10;
+  pointer-events: auto;
+  min-width: 24px;
+  min-height: 24px;
 }
 
 .icon-button:hover {
