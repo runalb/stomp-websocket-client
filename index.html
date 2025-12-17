@@ -28,12 +28,26 @@
     <div class="form-grid">
       <div class="field-group">
         <label for="wsUrl" class="field-label">WebSocket URL</label>
-        <input
-          id="wsUrl"
-          class="field-input"
-          value="https://unaiding-autumn-strident.ngrok-free.app/ws"
-          placeholder="https://localhost:8080/ws"
-        >
+        <div class="input-with-icon">
+          <input
+            id="wsUrl"
+            class="field-input"
+            value="https://unaiding-autumn-strident.ngrok-free.app/ws"
+            placeholder="https://localhost:8080/ws"
+          >
+          <button 
+            type="button"
+            class="icon-button"
+            onclick="openWebSocketUrl()"
+            title="Open WebSocket URL in new tab"
+          >
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
+              <polyline points="15 3 21 3 21 9"></polyline>
+              <line x1="10" y1="14" x2="21" y2="3"></line>
+            </svg>
+          </button>
+        </div>
       </div>
 
       <div class="field-group">
@@ -170,6 +184,13 @@
     } else {
       connectBtn.disabled = false;
       connectLabel.textContent = "Connect";
+    }
+  }
+
+  function openWebSocketUrl() {
+    const wsUrl = document.getElementById("wsUrl").value;
+    if (wsUrl && wsUrl.trim()) {
+      window.open(wsUrl.trim(), '_blank');
     }
   }
 </script>
