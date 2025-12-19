@@ -4,8 +4,7 @@
   <meta charset="UTF-8">
   <title>STOMP WebSocket Client by Runal Banarse</title>
 
-  <!-- SockJS & STOMP -->
-  <script src="https://cdn.jsdelivr.net/npm/sockjs-client@1/dist/sockjs.min.js"></script>
+  <!--STOMP -->
   <script src="https://cdn.jsdelivr.net/npm/stompjs@2.3.3/lib/stomp.min.js"></script>
 
   <link rel="stylesheet" href="styles.css">
@@ -32,8 +31,8 @@
           <input
             id="wsUrl"
             class="field-input"
-            value="https://unaiding-autumn-strident.ngrok-free.app/ws"
-            placeholder="https://localhost:8080/ws"
+            value=""
+            placeholder="ws://localhost:8080/ws"
           >
           <button 
             type="button"
@@ -57,6 +56,26 @@
           class="field-input"
           value="businessOutlet.1.UPDATE_TABLE_AREA"
           placeholder="businessOutlet.{businessOutletId}.{event}, example: businessOutlet.1.UPDATE_TABLE_AREA"
+        >
+      </div>
+
+      <div class="field-group">
+        <label for="Username" class="field-label">Username</label>
+        <input
+          id="username"
+          class="field-input"
+          value=""
+          placeholder="Enter Username"
+        >
+      </div>
+
+      <div class="field-group">
+        <label for="Password" class="field-label">Password</label>
+        <input
+          id="password"
+          class="field-input"
+          value=""
+          placeholder="Enter Password"
         >
       </div>
 
@@ -137,11 +156,16 @@
     connectBtn.disabled = true;
     connectLabel.textContent = "Connecting...";
 
-    const socket = new SockJS(wsUrl);
+    const socket = new WebSocket(wsUrl);
     stompClient = Stomp.over(socket);
-    stompClient.debug = null; // disable verbose logs
+    // stompClient.debug = null; // disable verbose logs
 
-    stompClient.connect({}, () => {
+    stompClient.connect(
+      {
+        login: document.getElementById("username").value,
+        passcode: document.getElementById("password").value
+      }, 
+      () => {
       isConnecting = false;
       connectBtn.classList.remove("btn-loading");
       connectBtn.disabled = true;
